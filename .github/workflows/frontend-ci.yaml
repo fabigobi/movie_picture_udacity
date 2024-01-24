@@ -14,6 +14,10 @@ env:
 jobs:
   lintApplication:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: starter/frontend
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
@@ -22,13 +26,16 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
           cache: 'npm'
-          cache-dependency-path: './frontend/package-lock.json'
       - name: Install dependencies
         run: npm ci
       - name: Lint
         run: npm run lint
   testApplication:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: starter/frontend
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
@@ -37,7 +44,6 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
           cache: 'npm'
-          cache-dependency-path: './frontend/package-lock.json'
       - name: Install dependencies
         run: npm ci
       - name: Test
@@ -45,6 +51,10 @@ jobs:
   buildApplication:
     needs: [lintApplication, testApplication]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: starter/frontend
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
@@ -53,16 +63,12 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
           cache: 'npm'
-          cache-dependency-path: './frontend/package-lock.json'
       - name: Install dependencies
         run: npm ci
       - name: Build
         run: 
           REACT_APP_MOVIE_API_URL=http://localhost:5000 npm start
-        working-directory: ./starter/frontend
       - name: Build Docker image
         run: docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
-        working-directory: ./starter/frontend
       - name: Run Docker image
         run: docker run --name mp-frontend -p 3000:3000 -d mp-frontend]
-        working-directory: ./starter/frontend

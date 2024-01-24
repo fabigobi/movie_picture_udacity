@@ -92,4 +92,4 @@ jobs:
         run: curl http://localhost:5000/movies
 
       - name: Stop the application
-        run: docker stop
+        run: docker stop mp-backend

@@ -7,57 +7,86 @@ on:
       - 'starter/frontend/**'
   workflow_dispatch:
 
-env:
-  # Set Node.js Version
-  NODE_VERSION: '18.x'
-
 jobs:
-  lintApplication:
+  lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: starter/backend
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.8
+
       - name: Install pipenv using pip
         run: pip install pipenv
-      - run: pipenv install
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
       - name: Test pipenv
         run: pipenv run lint
-  testApplication:
+  test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: starter/backend
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.8
+
       - name: Install pipenv using pip
         run: pip install pipenv
-      - run: pipenv install
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
       - name: Test pipenv
         run: pipenv run test
-  buildApplication:
-    needs: [lintApplication, testApplication]
+  build:
+    needs: [lint, test]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: starter/backend
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.8
+
       - name: Install pipenv using pip
         run: pip install pipenv
-      - run: pipenv install
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: deps-python-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
       - name: Run application
         run: pipenv run serve
+
       - name: Build Docker image
         run: docker build --tag mp-backend:latest .
-        working-directory: ./starter/backend
+
       - name: Run Docker image
         run: docker run -p 5000:5000 --name mp-backend -d mp-backend
-        working-directory: ./starter/backend

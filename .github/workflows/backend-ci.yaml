@@ -17,8 +17,13 @@ jobs:
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
-      - name: Install pipenv
-        run: pipenv install
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8
+      - name: Install pipenv using pip
+        run: pip install pipenv
+      - run: pipenv install
       - name: Test pipenv
         run: pipenv run lint
   testApplication:
@@ -26,8 +31,13 @@ jobs:
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
-      - name: Install pipenv
-        run: pipenv install
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8
+      - name: Install pipenv using pip
+        run: pip install pipenv
+      - run: pipenv install
       - name: Test pipenv
         run: pipenv run test
   buildApplication:
@@ -36,8 +46,13 @@ jobs:
     steps:
       - name: Check out the code to the runner
         uses: actions/checkout@v3
-      - name: Install pipenv
-        run: pipenv install
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8
+      - name: Install pipenv using pip
+        run: pip install pipenv
+      - run: pipenv install
       - name: Run application
         run: pipenv run serve
       - name: Build Docker image

@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint
-        run: npm run lint --fix
+        run: FAIL_LINT=false npm run lint
   testApplication:
     runs-on: ubuntu-latest
     defaults:

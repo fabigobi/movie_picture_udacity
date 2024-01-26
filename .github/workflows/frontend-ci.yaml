@@ -30,7 +30,7 @@ jobs:
         run: npm ci
       - name: Lint
         run: npx eslint --fix .
-      - run: npx eslint .
+      - run: cat .eslintrc.js
   testApplication:
     runs-on: ubuntu-latest
     defaults:

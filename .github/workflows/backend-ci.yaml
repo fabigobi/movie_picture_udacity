@@ -1,10 +1,10 @@
 name: 'Backend Continuous Integration'
 on:
   pull_request:
-    branches:
-      - 'main'
-    paths:
-      - 'starter/frontend/**'
+    # branches:
+    #   - 'main'
+    # paths:
+    #   - 'starter/frontend/**'
   workflow_dispatch:
 
 jobs:

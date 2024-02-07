@@ -7,10 +7,6 @@ on:
       # - 'starter/frontend/**'
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -101,10 +97,10 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: arn:aws:iam::193073285357:user/github-action-user
+        # role-to-assume: arn:aws:iam::193073285357:user/github-action-user
         aws-region: us-east-1
-        # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         # aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
 
     - name: Login to ECR
